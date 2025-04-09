@@ -6,6 +6,19 @@ set MSI_URL=https://app.mypurecloud.com/directory-windows/build-assets/2.41.817-
 set MSI_FILE=genesys-cloud-windows-2.41.817.msi
 set INSTALL_DIR=C:\Users\Public
 
+:: Check if the script is run as Administrator
+openfiles >nul 2>&1
+if %errorlevel% NEQ 0 (
+    echo This script requires administrator privileges. Please run as Administrator.
+    pause
+    exit /b 1
+)
+
+:: Enable System Restore service if disabled
+echo Enabling System Restore service...
+sc config srservice start= auto
+sc start srservice
+
 :: Create download directory if it doesn't exist
 if not exist "%INSTALL_DIR%" (
     mkdir "%INSTALL_DIR%"
