@@ -1,14 +1,21 @@
 @echo off
 cd /d %~dp0
 
+:: Define the installation location and MSI file details
+set DOWNLOAD_DIR=C:\Users\Public
 set MSI_NAME=genesys-cloud-windows-2.41.817.msi
 set MSI_URL=https://app.mypurecloud.com/directory-windows/build-assets/2.41.817-118/%MSI_NAME%
-set LOG_FILE=%CD%\install.log
+set LOG_FILE=%DOWNLOAD_DIR%\install.log
+
+:: Create download directory if it doesn't exist
+if not exist "%DOWNLOAD_DIR%" (
+    mkdir "%DOWNLOAD_DIR%"
+)
 
 echo Downloading Genesys Cloud installer...
-curl -L -o "%MSI_NAME%" "%MSI_URL%"
+curl -L -o "%DOWNLOAD_DIR%\%MSI_NAME%" "%MSI_URL%"
 
-if not exist "%MSI_NAME%" (
+if not exist "%DOWNLOAD_DIR%\%MSI_NAME%" (
     echo Download failed.
     pause
     exit /b 1
@@ -27,7 +34,7 @@ timeout /t 5
 echo Running Genesys Cloud installer...
 
 :: Force full reinstall (even if already installed)
-msiexec /i "%CD%\%MSI_NAME%" /qn /norestart REINSTALL=ALL REINSTALLMODE=vomus /L*v "%LOG_FILE%"
+msiexec /i "%DOWNLOAD_DIR%\%MSI_NAME%" /qn /norestart REINSTALL=ALL REINSTALLMODE=vomus /L*v "%LOG_FILE%"
 
 echo.
 echo If no errors appeared, the update is now running in the background.
