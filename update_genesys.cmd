@@ -17,19 +17,23 @@ if not exist "%MSI_NAME%" (
 echo.
 echo Checking if Genesys Cloud is already installed...
 
-:: Uninstall previous version if installed
+:: Uninstall previous version if installed (use GUID if available)
 echo Attempting to uninstall any previous versions of Genesys Cloud...
-msiexec /x {166CEF10-E702-44B0-ACAD-7D66DA52C045} /qn /norestart
+msiexec /x {PRODUCT-CODE-GUID} /qn /norestart
 
 :: Wait for a few seconds before proceeding
 timeout /t 5
 
 echo Running Genesys Cloud installer...
 
-:: Force full reinstall
+:: Force full reinstall (even if already installed)
 msiexec /i "%CD%\%MSI_NAME%" /qn /norestart REINSTALL=ALL REINSTALLMODE=vomus /L*v "%LOG_FILE%"
 
 echo.
 echo If no errors appeared, the update is now running in the background.
 echo Log written to: %LOG_FILE%
 pause
+
+:: Check the log for errors
+echo Checking installation log...
+notepad "%LOG_FILE%"
