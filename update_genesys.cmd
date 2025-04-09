@@ -19,7 +19,7 @@ echo Checking if Genesys Cloud is already installed...
 
 :: Uninstall previous version if installed
 echo Attempting to uninstall any previous versions of Genesys Cloud...
-msiexec /x {PRODUCT-CODE-GUID} /qn /norestart
+msiexec /x {166CEF10-E702-44B0-ACAD-7D66DA52C045} /qn /norestart
 
 :: Wait for a few seconds before proceeding
 timeout /t 5
