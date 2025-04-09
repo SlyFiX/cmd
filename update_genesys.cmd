@@ -15,7 +15,18 @@ if not exist "%MSI_NAME%" (
 )
 
 echo.
-echo Running installer as current user (make sure this window is running as administrator)...
+echo Checking if Genesys Cloud is already installed...
+
+:: Uninstall previous version if installed
+echo Attempting to uninstall any previous versions of Genesys Cloud...
+msiexec /x {PRODUCT-CODE-GUID} /qn /norestart
+
+:: Wait for a few seconds before proceeding
+timeout /t 5
+
+echo Running Genesys Cloud installer...
+
+:: Force full reinstall
 msiexec /i "%CD%\%MSI_NAME%" /qn /norestart REINSTALL=ALL REINSTALLMODE=vomus /L*v "%LOG_FILE%"
 
 echo.
