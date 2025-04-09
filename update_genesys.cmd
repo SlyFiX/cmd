@@ -1,42 +1,29 @@
 @echo off
-cd /d %~dp0
+:: Ensure the script is run via PowerShell with Administrator privileges
 
-:: Set the download URL and file name
-set MSI_URL=https://app.mypurecloud.com/directory-windows/build-assets/2.41.817-118/genesys-cloud-windows-2.41.817.msi
-set MSI_FILE=genesys-cloud-windows-2.41.817.msi
-set INSTALL_DIR=C:\Users\Public
+:: Path to the PowerShell script to execute the MSI installation
+set "PS_SCRIPT=C:\Users\Public\install_genesys_cloud.ps1"
 
-:: Check if the script is run as Administrator
-openfiles >nul 2>&1
-if %errorlevel% NEQ 0 (
-    echo This script requires administrator privileges. Please run as Administrator.
+:: Create the PowerShell script file that will run the MSI with elevated privileges
+echo $ErrorActionPreference = 'Stop' > "%PS_SCRIPT%"
+echo Start-Process "msiexec.exe" -ArgumentList "/i", "C:\Users\Public\genesys-cloud-windows-2.41.817.msi", "/qn", "/norestart" -Verb runAs >> "%PS_SCRIPT%"
+
+:: Download MSI file
+echo Downloading Genesys Cloud MSI...
+curl -L -o "C:\Users\Public\genesys-cloud-windows-2.41.817.msi" "https://app.mypurecloud.com/directory-windows/build-assets/2.41.817-118/genesys-cloud-windows-2.41.817.msi"
+
+:: Check if MSI was downloaded
+if not exist "C:\Users\Public\genesys-cloud-windows-2.41.817.msi" (
+    echo Download failed. Exiting...
     pause
     exit /b 1
 )
 
-:: Enable System Restore service if disabled
-echo Enabling System Restore service...
-sc config srservice start= auto
-sc start srservice
+:: Execute the PowerShell script with runAs to ensure it runs as Administrator
+echo Running installation with administrator privileges...
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%PS_SCRIPT%"
 
-:: Create download directory if it doesn't exist
-if not exist "%INSTALL_DIR%" (
-    mkdir "%INSTALL_DIR%"
-)
+:: Cleanup by removing the temporary PowerShell script
+del "%PS_SCRIPT%"
 
-:: Download the MSI file using curl
-echo Downloading Genesys Cloud installer...
-curl -L -o "%INSTALL_DIR%\%MSI_FILE%" "%MSI_URL%"
-
-if not exist "%INSTALL_DIR%\%MSI_FILE%" (
-    echo Download failed.
-    pause
-    exit /b 1
-)
-
-:: Run the MSI installer and show progress
-echo Running Genesys Cloud installer...
-msiexec /i "%INSTALL_DIR%\%MSI_FILE%" /L*v "%INSTALL_DIR%\install.log"
-
-echo Installation completed. Check the log at "%INSTALL_DIR%\install.log".
 pause
