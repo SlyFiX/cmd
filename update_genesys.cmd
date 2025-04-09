@@ -33,8 +33,8 @@ timeout /t 5
 
 echo Running Genesys Cloud installer...
 
-:: Force full reinstall (even if already installed)
-msiexec /i "%DOWNLOAD_DIR%\%MSI_NAME%" /qn /norestart REINSTALL=ALL REINSTALLMODE=vomus /L*v "%LOG_FILE%"
+:: Run the installer and make the process visible in the CMD
+msiexec /i "%DOWNLOAD_DIR%\%MSI_NAME%" REINSTALL=ALL REINSTALLMODE=vomus /L*v "%LOG_FILE%"
 
 echo.
 echo If no errors appeared, the update is now running in the background.
