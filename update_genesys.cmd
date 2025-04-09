@@ -15,8 +15,8 @@ if not exist "%MSI_NAME%" (
 )
 
 echo.
-echo Please enter password for ADMIN when prompted...
-runas /user:CALLEXCELL\ADM.VPETROV "cmd /c \"msiexec /i \"%CD%\%MSI_NAME%\" /qn /norestart REINSTALL=ALL REINSTALLMODE=amus /L*v \"%LOG_FILE%\"\""
+echo Running installer as current user (make sure this window is running as administrator)...
+msiexec /i "%CD%\%MSI_NAME%" /qn /norestart REINSTALL=ALL REINSTALLMODE=vomus /L*v "%LOG_FILE%"
 
 echo.
 echo If no errors appeared, the update is now running in the background.
