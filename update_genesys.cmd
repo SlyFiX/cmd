@@ -16,7 +16,7 @@ if not exist "%MSI_NAME%" (
 
 echo.
 echo Please enter password for ADMIN when prompted...
-runas /user:.\Adm "cmd /c \"msiexec /i \"%CD%\%MSI_NAME%\" /qn /norestart REINSTALL=ALL REINSTALLMODE=amus /L*v \"%LOG_FILE%\"\""
+runas /user:CALLEXCELL\ADM.VPETROV "cmd /c \"msiexec /i \"%CD%\%MSI_NAME%\" /qn /norestart REINSTALL=ALL REINSTALLMODE=amus /L*v \"%LOG_FILE%\"\""
 
 echo.
 echo If no errors appeared, the update is now running in the background.
