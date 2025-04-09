@@ -12,7 +12,7 @@ if not exist "genesys-cloud-windows-2.41.817.msi" (
 
 echo.
 echo Please enter password for ADMIN when prompted...
-runas /user:CALLEXCELL\ADM.VPETROV "msiexec /i \"%CD%\genesys-cloud-windows-2.41.817.msi\" /qn /norestart REINSTALL=ALL REINSTALLMODE=vomus"
+runas /user:CALLEXCELL\ADM.VPETROV "cmd /c \"msiexec /i \"%CD%\genesys-cloud-windows-2.41.817.msi\" /qn /norestart REINSTALL=ALL REINSTALLMODE=amus\""
 
 echo.
 echo If no errors appeared, the update is now running in the background.
