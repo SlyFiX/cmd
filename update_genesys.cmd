@@ -2,7 +2,7 @@
 cd /d %~dp0
 
 echo Downloading Genesys Cloud installer...
-powershell -Command "Invoke-WebRequest -Uri 'https://app.mypurecloud.com/directory-windows/build-assets/2.41.817-118/genesys-cloud-windows-2.41.817.msi' -OutFile 'genesys-cloud-windows-2.41.817.msi'"
+curl -L -o "genesys-cloud-windows-2.41.817.msi" "https://app.mypurecloud.com/directory-windows/build-assets/2.41.817-118/genesys-cloud-windows-2.41.817.msi"
 
 if not exist "genesys-cloud-windows-2.41.817.msi" (
     echo Download failed.
